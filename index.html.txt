@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+Palette: Energetic & Playful (Deep Orange #FF5A00, Action Blue #0EA5E9, Slate #1E293B, White #FFFFFF)
+Plan Summary: 
+1. Introduction: Establishes the WA winter camping context and Portable Solutions' consultative, community-driven approach.
+2. Fuel Strategy: Highlights the massive savings of the 90-minute radius using a Bar Chart.
+3. Park Pass Economics: Demonstrates the ROI of 5-Day vs 4-Week passes using a Line Chart.
+4. Thermal Efficiency: Contrasts expensive gear with budget hacks using a Horizontal Bar Chart.
+5. Demographic Strategies: Structured HTML cards detailing specific advice for the 5 core customer types.
+Chart Choices:
+- Fuel Cost (Compare): Bar Chart (Chart.js) - Best for comparing distinct categories (North vs Local). NO SVG.
+- Park Pass ROI (Change/Compare): Line Chart (Chart.js) - Best for showing cumulative cost over sequential visits to find break-even points. NO SVG.
+- Thermal Efficiency (Compare): Horizontal Bar Chart (Chart.js) - Best for comparing widely differing price points with long labels. NO SVG.
+Confirmation: NEITHER Mermaid JS NOR SVG were used anywhere in the output.
+-->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Perth Camper's Guide to May & June</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            orange: '#FF5A00',
+                            blue: '#0EA5E9',
+                            slate: '#1E293B',
+                            light: '#F8FAFC',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #F8FAFC;
+            color: #1E293B;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .card {
+            background-color: #FFFFFF;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 1.5rem;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <nav class="bg-brand-slate text-white sticky top-0 z-50 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-3">
+                    <span class="text-2xl">🏕️</span>
+                    <span class="font-bold text-xl tracking-wide">Portable Solutions</span>
+                </div>
+                <div class="hidden md:block text-sm font-medium text-gray-300">
+                    Monthly Camping & Off-Grid Recreation Report
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        
+        <header class="text-center mb-16">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-brand-slate mb-4">
+                The Perth Camper’s Guide to <span class="text-brand-orange">May & June</span>
+            </h1>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                Thriving in the Winter Transition. We know the cost-of-living crisis is biting hard, but West Australians navigate it with proactive, thoughtful rigor. Based on chats with over 250 community members at our Nollamara base, here is how you camp smarter, stay warm, and cut costs.
+            </p>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+            
+            <div class="card md:col-span-2">
+                <h2 class="text-2xl font-bold mb-3 text-brand-slate border-b-2 border-brand-orange pb-2 inline-block">The "90-Minute Radius" Fuel Strategy</h2>
+                <p class="mb-6 text-gray-700">
+                    Fuel is the silent budget killer. While the idea of chasing the sun up to Exmouth is tempting, the diesel burn is severe. By keeping your trips within a 90-minute radius of Perth (like Lane Poole Reserve or John Forrest National Park), you liberate capital that can fund an entire winter season of adventures.
+                </p>
+                <div class="w-full flex justify-center">
+                    <div class="chart-container">
+                        <canvas id="fuelChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2 class="text-2xl font-bold mb-3 text-brand-slate border-b-2 border-brand-orange pb-2 inline-block">Tactical Intelligence: Park Passes</h2>
+                <p class="mb-6 text-gray-700">
+                    Paying $17 per daily entry is an inefficient use of capital if you plan multiple trips. The 4-Week Holiday Pass ($70) acts as your "Winter Transition Membership," breaking even rapidly and encouraging more trips.
+                </p>
+                <div class="w-full flex flex-col justify-center flex-grow">
+                    <div class="chart-container">
+                        <canvas id="passChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2 class="text-2xl font-bold mb-3 text-brand-slate border-b-2 border-brand-orange pb-2 inline-block">Thermal Efficiency Economics</h2>
+                <p class="mb-6 text-gray-700">
+                    Winter nights drop fast, but you don't need over-engineered boutique setups. A $20 foam mat under your bed prevents the earth from leaching heat, and a $5 hot water bottle beats a technical sub-zero sleeping bag for budget efficiency.
+                </p>
+                <div class="w-full flex flex-col justify-center flex-grow">
+                    <div class="chart-container">
+                        <canvas id="thermalChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="mb-12">
+            <h2 class="text-3xl font-extrabold text-center text-brand-slate mb-8">Tailored Community Strategies</h2>
+            <p class="text-center text-gray-600 max-w-2xl mx-auto mb-10">
+                Based on our research into the five main groups of campers we see at Portable Solutions, here is how you can specifically win this winter using proactive rigor.
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                <div class="bg-brand-slate text-white rounded-xl p-6 shadow-lg border-t-4 border-brand-orange">
+                    <div class="text-4xl mb-4">🛠️</div>
+                    <h3 class="text-xl font-bold mb-2">The FIFO Legend</h3>
+                    <p class="text-sm text-gray-300 font-semibold mb-4">The Time-Rich Strategist</p>
+                    <p class="text-gray-200 text-sm mb-4">Don't waste your R&R in crowded caravan parks. Use your mid-week availability to hit popular spots like Sandy Cape when they are empty.</p>
+                    <div class="bg-gray-800 p-3 rounded text-sm">
+                        <strong class="text-brand-orange">Core Value:</strong> Utilize the 4-Week Holiday Pass. It shifts your mindset from "paying to visit" to "utilizing an asset you already own."
+                    </div>
+                </div>
+
+                <div class="bg-brand-slate text-white rounded-xl p-6 shadow-lg border-t-4 border-brand-blue">
+                    <div class="text-4xl mb-4">👨‍👩‍👧‍👦</div>
+                    <h3 class="text-xl font-bold mb-2">The Established Family</h3>
+                    <p class="text-sm text-gray-300 font-semibold mb-4">The Safety & Value Seeker</p>
+                    <p class="text-gray-200 text-sm mb-4">Keeping the kids warm and fed is the priority. Use the "Block Ice" Method: freeze pre-cooked meals at home. They act as ice blocks, then thaw for a cheap dinner.</p>
+                    <div class="bg-gray-800 p-3 rounded text-sm">
+                        <strong class="text-brand-blue">Core Value:</strong> Leverage public BBQs in local reserves to save your own gas supply and reduce vehicle weight.
+                    </div>
+                </div>
+
+                <div class="bg-brand-slate text-white rounded-xl p-6 shadow-lg border-t-4 border-brand-orange">
+                    <div class="text-4xl mb-4">💻</div>
+                    <h3 class="text-xl font-bold mb-2">The Young Professional</h3>
+                    <p class="text-sm text-gray-300 font-semibold mb-4">The Digital Nomad</p>
+                    <p class="text-gray-200 text-sm mb-4">You want the views but need to keep costs low. Move away from commercial parks and use Hipcamp to find secluded private land for $15–$20 a night.</p>
+                    <div class="bg-gray-800 p-3 rounded text-sm">
+                        <strong class="text-brand-orange">Core Value:</strong> The WikiCamps app ($9.99) prevents budget blowouts by locating free water taps and dump stations.
+                    </div>
+                </div>
+
+                <div class="bg-brand-slate text-white rounded-xl p-6 shadow-lg border-t-4 border-brand-blue lg:col-start-1 lg:col-span-1 md:col-span-2">
+                    <div class="text-4xl mb-4">🚐</div>
+                    <h3 class="text-xl font-bold mb-2">The Grey Nomad</h3>
+                    <p class="text-sm text-gray-300 font-semibold mb-4">The Rigorous Professional</p>
+                    <p class="text-gray-200 text-sm mb-4">You’ve mastered the long-game. Execute all fuel top-ups on Tuesdays or Wednesdays to hit the lowest point in the Perth price cycle.</p>
+                    <div class="bg-gray-800 p-3 rounded text-sm">
+                        <strong class="text-brand-blue">Core Value:</strong> Present your Seniors Card for $10 per vehicle park entry. Mastery of the environment through logic rather than luxury.
+                    </div>
+                </div>
+
+                <div class="bg-brand-slate text-white rounded-xl p-6 shadow-lg border-t-4 border-brand-orange md:col-span-2 lg:col-span-2">
+                    <div class="text-4xl mb-4">📉</div>
+                    <h3 class="text-xl font-bold mb-2">The Budget Strategist</h3>
+                    <p class="text-sm text-gray-300 font-semibold mb-4">High-Rigor Savers</p>
+                    <p class="text-gray-200 text-sm mb-4">Navigate the cost-of-living crisis by eliminating excess mass. Strip unused roof racks; every kg removed improves L/100km fuel efficiency.</p>
+                    <div class="bg-gray-800 p-3 rounded text-sm">
+                        <strong class="text-brand-orange">Core Value:</strong> The Lantern Hack: Wrap your head torch around a clear water bottle (facing inward) for a zero-cost camp lantern.
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <footer class="text-center mt-16 pt-8 border-t border-gray-200">
+            <h4 class="text-xl font-bold text-brand-slate mb-2">Plan with rigor, stay warm, and see you in the field.</h4>
+            <p class="text-gray-500 text-sm">Brought to you by the team at Portable Solutions, Nollamara.</p>
+        </footer>
+
+    </main>
+
+    <script>
+        function wrapText(text, maxLineLength = 16) {
+            if (text.length <= maxLineLength) return text;
+            const words = text.split(' ');
+            const lines = [];
+            let currentLine = words[0];
+            for (let i = 1; i < words.length; i++) {
+                if (currentLine.length + 1 + words[i].length <= maxLineLength) {
+                    currentLine += ' ' + words[i];
+                } else {
+                    lines.push(currentLine);
+                    currentLine = words[i];
+                }
+            }
+            lines.push(currentLine);
+            return lines;
+        }
+
+        const commonTooltipConfig = {
+            callbacks: {
+                title: function(tooltipItems) {
+                    const item = tooltipItems[0];
+                    let label = item.chart.data.labels[item.dataIndex];
+                    if (Array.isArray(label)) {
+                        return label.join(' ');
+                    } else {
+                        return label;
+                    }
+                }
+            }
+        };
+
+        const fuelLabelsRaw = ["Northern Trip (Cape Range Return)", "Local Trip (Dwellingup Return)"];
+        const fuelLabels = fuelLabelsRaw.map(l => wrapText(l));
+        
+        const ctxFuel = document.getElementById('fuelChart').getContext('2d');
+        new Chart(ctxFuel, {
+            type: 'bar',
+            data: {
+                labels: fuelLabels,
+                datasets: [{
+                    label: 'Estimated Fuel Cost ($AUD)',
+                    data: [600, 40],
+                    backgroundColor: ['#FF5A00', '#0EA5E9'],
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: commonTooltipConfig
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { callback: function(value) { return '$' + value; } }
+                    }
+                }
+            }
+        });
+
+        const passLabelsRaw = ["Visit 1", "Visit 2", "Visit 3", "Visit 4", "Visit 5"];
+        const passLabels = passLabelsRaw.map(l => wrapText(l));
+
+        const ctxPass = document.getElementById('passChart').getContext('2d');
+        new Chart(ctxPass, {
+            type: 'line',
+            data: {
+                labels: passLabels,
+                datasets: [
+                    {
+                        label: 'Daily Entry Fee ($17/visit)',
+                        data: [17, 34, 51, 68, 85],
+                        borderColor: '#1E293B',
+                        backgroundColor: '#1E293B',
+                        tension: 0.1,
+                        borderWidth: 3
+                    },
+                    {
+                        label: '5-Day Pass ($30 flat)',
+                        data: [30, 30, 30, 30, 30],
+                        borderColor: '#0EA5E9',
+                        backgroundColor: '#0EA5E9',
+                        borderDash: [5, 5],
+                        tension: 0.1,
+                        borderWidth: 3
+                    },
+                    {
+                        label: '4-Week Pass ($70 flat)',
+                        data: [70, 70, 70, 70, 70],
+                        borderColor: '#FF5A00',
+                        backgroundColor: '#FF5A00',
+                        tension: 0.1,
+                        borderWidth: 3
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    tooltip: commonTooltipConfig,
+                    legend: { position: 'bottom' }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { callback: function(value) { return '$' + value; } }
+                    }
+                }
+            }
+        });
+
+        const thermalLabelsRaw = ["Technical Sub-Zero Sleeping Bag", "Esky Mat Hack & Hot Water Bottle"];
+        const thermalLabels = thermalLabelsRaw.map(l => wrapText(l));
+
+        const ctxThermal = document.getElementById('thermalChart').getContext('2d');
+        new Chart(ctxThermal, {
+            type: 'bar',
+            data: {
+                labels: thermalLabels,
+                datasets: [{
+                    label: 'Estimated Cost ($AUD)',
+                    data: [500, 25],
+                    backgroundColor: ['#1E293B', '#FF5A00'],
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: commonTooltipConfig
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        ticks: { callback: function(value) { return '$' + value; } }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
